@@ -1,9 +1,9 @@
 ###
-🍽️ QR-Based Restaurant Ordering System
+# 🍽️ QR-Based Restaurant Ordering System
 
 A modern, contactless restaurant ordering system where customers scan a QR code, browse the menu, place orders, and make payments seamlessly — all from their mobile device. Includes a powerful admin dashboard for managing orders, menu items, and advertisements.
 
---
+---
 
 ## 🚀 Features
 
@@ -31,7 +31,7 @@ A modern, contactless restaurant ordering system where customers scan a QR code,
 #### 📍 Tracking
 - Real-time order tracking  
 
---
+---
 
 ### 🛠️ Admin Dashboard
 
@@ -50,7 +50,7 @@ A modern, contactless restaurant ordering system where customers scan a QR code,
 - Protected admin routes  
 - Prevent unauthorized access via URL  
 
---
+---
 
 ## 🧠 System Flow
 
@@ -58,12 +58,8 @@ A modern, contactless restaurant ordering system where customers scan a QR code,
 - Scan QR → Open Menu → Add Items → Checkout → Payment Success  
 - Order Placed → Track Order → Add More Items (New Payment)  
 
---
-
 ### 🛠️ Admin Flow
 - Login → Dashboard → Manage Orders / Menu / Ads → Monitor Activity  
-
---
 
 ## 🏗️ Tech Stack
 
@@ -72,24 +68,21 @@ A modern, contactless restaurant ordering system where customers scan a QR code,
 - Tailwind CSS / CSS Modules  
 - Axios / Fetch API  
 
---
-
+---
 ### Backend
 - Node.js + Express  
 - REST APIs  
-
---
-
+---
 ### Database
 - MongoDB / MySQL  
 
---
+---
 
 ### Other Integrations
 - Payment Gateway (Razorpay / Stripe)  
 - WebSockets (real-time tracking)  
 
---
+---
 
 ## 📂 Project Structure
 
@@ -114,51 +107,4 @@ project-root/
 └── README.md
 ```
 
---
-
-## 🔐 Security Considerations
-
-- Admin routes are protected via authentication tokens  
-- Direct URL access (e.g., /admin-dashboard) is restricted  
-- Session-based or JWT-based authentication recommended  
-- Prevent access from unauthorized browsers or tabs  
-
---
-
-## ⚙️ Installation
-
-### 1. Clone the Repository
-```bash
-git clone https://github.com/your-username/qr-ordering-system.git
-cd qr-ordering-system
-
---
-
-2. Install Dependencies
-# frontend
-cd frontend
-npm install
-
-# backend
-cd ../backend
-npm install
-
---
-
-3. Setup Environment Variables
-
-Create .env file in backend:
-
-PORT=5000
-DB_URI=your_database_url
-JWT_SECRET=your_secret_key
-PAYMENT_KEY=your_payment_key
-
---
-
-4. Run the Application
-# backend
-npm start
-
-# frontend
-npm run dev
+---
