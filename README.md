@@ -74,7 +74,7 @@ A modern, contactless restaurant ordering system where customers scan a QR code,
 - REST APIs  
 ---
 ### Database
-- MongoDB / MySQL  
+- MySQL  
 
 ---
 
