@@ -20,6 +20,10 @@ export const CartProvider = ({ children }) => {
     return saved ? JSON.parse(saved) : null;
   });
 
+  const [tableId, setTableId] = useState(() => {
+    return localStorage.getItem('tableId') || null;
+  });
+
   useEffect(() => {
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
   }, [cartItems]);
@@ -82,6 +86,12 @@ export const CartProvider = ({ children }) => {
     setCartItems([]);
   };
 
+  useEffect(() => {
+    if (tableId) {
+      localStorage.setItem('tableId', tableId);
+    }
+  }, [tableId]);
+
   const getCartTotal = () => cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const getCartCount = () => cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
@@ -90,6 +100,8 @@ export const CartProvider = ({ children }) => {
       cartItems,
       previousOrder,
       orderInfo,
+      tableId,
+      setTableId,
       addToCart,
       removeFromCart,
       updateQuantity,

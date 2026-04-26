@@ -10,7 +10,7 @@ import { placeOrder } from '../services/api';
 import { vibrate } from '../utils/haptics';
 
 const CartPage = () => {
-  const { cartItems, previousOrder, getCartTotal, placeOrderSuccess } = useCart();
+  const { cartItems, previousOrder, getCartTotal, placeOrderSuccess, tableId } = useCart();
   const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -36,10 +36,15 @@ const CartPage = () => {
   };
 
   const handleConfirmPayment = async () => {
+    if (!tableId) {
+      alert("Please scan a table QR code to place an order.");
+      return;
+    }
     try {
       const result = await placeOrder({ 
+        table_id: tableId,
         items: cartItems, 
-        total: totalDue,
+        total_amount: totalDue,
         instructions: specialInstructions 
       });
       placeOrderSuccess(result);

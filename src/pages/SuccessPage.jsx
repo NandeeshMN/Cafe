@@ -35,11 +35,11 @@ const SuccessPage = () => {
 
   // Poll for order status
   React.useEffect(() => {
-    if (!orderInfo?.id || currentStatus === 'Cancelled' || currentStatus === 'Served') return;
+    if (!orderInfo?.order_number || currentStatus === 'Cancelled' || currentStatus === 'Served') return;
 
     const interval = setInterval(async () => {
       try {
-        const { status } = await fetchOrderStatus(orderInfo.id);
+        const { status } = await fetchOrderStatus(orderInfo.order_number);
         if (status && status !== 'Unknown') {
           setCurrentStatus(status);
         }
@@ -54,7 +54,9 @@ const SuccessPage = () => {
   const handleCancelOrder = async (cancelData) => {
     setIsCancelling(true);
     try {
-      await cancelOrder(orderInfo?.id || 'TEST-ID', cancelData);
+      if (orderInfo?.order_number) {
+        await cancelOrder(orderInfo.order_number, cancelData.reason);
+      }
       setIsCancelModalOpen(false);
       setCurrentStatus('Cancelled');
       
@@ -99,7 +101,7 @@ const SuccessPage = () => {
           <div className="flex justify-between items-center border-b border-[#e2dcd2] pb-4 mb-4">
             <div>
               <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider block mb-1">ORDER ID</span>
-              <span className="font-bold text-[#3e2723] text-lg">{orderInfo?.id || '#AC-123456'}</span>
+              <span className="font-bold text-[#3e2723] text-lg">{orderInfo?.order_number || '#AC-123456'}</span>
             </div>
             <div className="text-right">
               <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider block mb-1">Est. pickup</span>

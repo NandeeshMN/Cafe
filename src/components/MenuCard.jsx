@@ -25,7 +25,7 @@ const MenuCard = ({ item }) => {
         {/* <p className="text-gray-500 text-xs mb-2 line-clamp-1">{item.description}</p> */}
         
         <div className="mt-auto flex items-center justify-between pt-2">
-          <span className="font-bold text-[#b71c1c] text-lg">${item.price.toFixed(2)}</span>
+          <span className="font-bold text-[#b71c1c] text-lg">${parseFloat(item.price).toFixed(2)}</span>
           
           {quantity > 0 ? (
             <div className="flex items-center bg-[#f0ebe1] rounded-full p-1 shadow-sm border border-[#e8dfd1]">

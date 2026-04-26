@@ -3,12 +3,27 @@ import { Search, Coffee } from 'lucide-react';
 import MenuCard from '../components/MenuCard';
 import BottomBar from '../components/BottomBar';
 import { fetchMenu } from '../services/api';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
 
 const MenuPage = () => {
+  const { setTableId, tableId } = useCart();
   const [menu, setMenu] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
+  const [clickCount, setClickCount] = useState(0);
+  const [lastClickTime, setLastClickTime] = useState(0);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const tId = params.get('tableId');
+    if (tId) {
+      setTableId(tId);
+    }
+  }, [location.search, setTableId]);
 
   useEffect(() => {
     const loadMenu = async () => {
@@ -36,7 +51,22 @@ const MenuPage = () => {
     <div className="min-h-screen bg-[#faf9f6] pb-32">
       {/* Header */}
       <header className="sticky top-0 z-40 bg-[#faf9f6]/95 backdrop-blur-sm px-5 py-4 flex items-center justify-between border-b border-gray-100">
-        <div className="flex items-center gap-2">
+        <div 
+          className="flex items-center gap-2 cursor-pointer active:scale-95 transition-transform"
+          onClick={() => {
+            const now = Date.now();
+            if (now - lastClickTime < 2000) {
+              const newCount = clickCount + 1;
+              if (newCount >= 5) {
+                navigate('/admin/login');
+              }
+              setClickCount(newCount);
+            } else {
+              setClickCount(1);
+            }
+            setLastClickTime(now);
+          }}
+        >
           <Coffee className="text-[#5a3a22]" size={24} strokeWidth={2.5} />
           <h1 className="font-bold text-xl text-[#3e2723] tracking-tight">Artisanal Cafe</h1>
         </div>
