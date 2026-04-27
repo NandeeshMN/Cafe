@@ -21,6 +21,8 @@ const MenuManagement = () => {
     image: '',
     description: ''
   });
+  const [editingItem, setEditingItem] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const categories = ['Beverages', 'Fast Food', 'Snacks'];
 
@@ -41,14 +43,34 @@ const MenuManagement = () => {
 
   const handleAddSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
     try {
-      await addMenuItem(newItem);
+      if (editingItem) {
+        await updateMenuItem(editingItem.id, newItem);
+      } else {
+        await addMenuItem(newItem);
+      }
       setShowModal(false);
+      setEditingItem(null);
       setNewItem({ name: '', category: 'Beverages', price: '', image: '', description: '' });
       loadMenu();
     } catch (err) {
-      alert("Failed to add item");
+      alert(editingItem ? "Failed to update item" : "Failed to add item");
+    } finally {
+      setIsSubmitting(false);
     }
+  };
+
+  const handleEditClick = (item) => {
+    setEditingItem(item);
+    setNewItem({
+      name: item.name,
+      category: item.category,
+      price: item.price,
+      image: item.image,
+      description: item.description || ''
+    });
+    setShowModal(true);
   };
 
   const handleDelete = async (id) => {
@@ -98,7 +120,10 @@ const MenuManagement = () => {
                   {item.category}
                 </span>
                 <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button className="p-1.5 text-gray-400 hover:text-blue-600">
+                  <button 
+                    onClick={() => handleEditClick(item)}
+                    className="p-1.5 text-gray-400 hover:text-blue-600 transition-colors"
+                  >
                     <Edit2 size={16} />
                   </button>
                   <button 
@@ -122,8 +147,16 @@ const MenuManagement = () => {
           <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setShowModal(false)}></div>
           <div className="bg-white w-full max-w-xl rounded-[3rem] shadow-2xl relative overflow-hidden animate-in fade-in zoom-in duration-300">
             <div className="px-10 pt-10 pb-6 flex items-center justify-between border-b border-gray-100">
-              <h2 className="text-2xl font-bold text-[#3e2723]">Add New Menu Item</h2>
-              <button onClick={() => setShowModal(false)} className="p-2 bg-gray-50 rounded-full text-gray-400 hover:text-gray-600 transition-colors">
+              <h2 className="text-2xl font-bold text-[#3e2723]">
+                {editingItem ? 'Edit Menu Item' : 'Add New Menu Item'}
+              </h2>
+              <button 
+                onClick={() => {
+                  setShowModal(false);
+                  setEditingItem(null);
+                }} 
+                className="p-2 bg-gray-50 rounded-full text-gray-400 hover:text-gray-600 transition-colors"
+              >
                 <X size={20} />
               </button>
             </div>
@@ -168,10 +201,10 @@ const MenuManagement = () => {
                   <div className="relative">
                     <ImageIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                     <input 
-                      type="url" 
+                      type="text" 
                       value={newItem.image}
                       onChange={(e) => setNewItem({...newItem, image: e.target.value})}
-                      placeholder="https://images.unsplash.com/..." 
+                      placeholder="Paste image URL here (e.g. https://...)" 
                       className="w-full pl-11 pr-5 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-[#5a3a22]/10 focus:border-[#5a3a22] transition-all outline-none"
                     />
                   </div>
@@ -188,9 +221,10 @@ const MenuManagement = () => {
                 </button>
                 <button 
                   type="submit"
-                  className="flex-1 py-4 bg-[#5a3a22] text-white rounded-2xl font-bold shadow-lg shadow-black/10 hover:bg-[#4a2f1b] transition-all"
+                  disabled={isSubmitting}
+                  className="flex-1 py-4 bg-[#5a3a22] text-white rounded-2xl font-bold shadow-lg shadow-black/10 hover:bg-[#4a2f1b] transition-all disabled:opacity-50 flex items-center justify-center gap-2"
                 >
-                  Save Item
+                  {isSubmitting ? 'Saving...' : (editingItem ? 'Update Item' : 'Save Item')}
                 </button>
               </div>
             </form>

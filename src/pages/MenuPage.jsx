@@ -109,17 +109,17 @@ const MenuPage = () => {
       {/* Menu Grid */}
       <main className="px-5 py-4">
         {loading ? (
-          <div className="grid grid-cols-2 gap-x-4 gap-y-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             {[...Array(6)].map((_, i) => (
-              <div key={i} className="animate-pulse">
-                <div className="bg-gray-200 rounded-[2rem] aspect-square mb-3"></div>
-                <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-                <div className="h-5 bg-gray-200 rounded w-1/4"></div>
+              <div key={i} className="animate-pulse bg-white rounded-xl p-2 border border-gray-100">
+                <div className="bg-gray-100 rounded-lg h-28 w-full mb-3"></div>
+                <div className="h-3 bg-gray-100 rounded w-3/4 mb-2"></div>
+                <div className="h-3 bg-gray-100 rounded w-1/4"></div>
               </div>
             ))}
           </div>
         ) : filteredMenu.length > 0 ? (
-          <div className="grid grid-cols-2 gap-x-4 gap-y-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             {filteredMenu.map(item => (
               <MenuCard key={item.id} item={item} />
             ))}

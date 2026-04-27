@@ -12,41 +12,48 @@ const MenuCard = ({ item }) => {
   const quantity = cartItem ? cartItem.quantity : 0;
 
   return (
-    <div className="flex flex-col">
-      <div className="relative rounded-[2rem] overflow-hidden mb-3 aspect-square shadow-sm">
-        <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
-        <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full">
-          <span className="text-[10px] font-bold text-[#5a3a22] uppercase tracking-wider">{item.category}</span>
+    <div className="bg-white rounded-xl shadow-sm overflow-hidden flex flex-col h-full border border-gray-100">
+      {/* Compact Image */}
+      <div className="relative h-28 w-full overflow-hidden">
+        <img 
+          src={item.image} 
+          alt={item.name} 
+          className="w-full h-full object-cover transition-transform duration-500 hover:scale-110" 
+        />
+        <div className="absolute top-2 left-2 bg-white/90 backdrop-blur-sm px-2 py-0.5 rounded-full shadow-sm">
+          <span className="text-[9px] font-black text-[#5a3a22] uppercase tracking-wider">{item.category}</span>
         </div>
       </div>
       
-      <div className="px-1 flex-1 flex flex-col">
-        <h3 className="font-semibold text-[#3e2723] text-[17px] leading-tight mb-1">{item.name}</h3>
-        {/* <p className="text-gray-500 text-xs mb-2 line-clamp-1">{item.description}</p> */}
+      {/* Content Area */}
+      <div className="p-2.5 flex-1 flex flex-col justify-between">
+        <div className="mb-2">
+          <h3 className="font-bold text-[#3e2723] text-sm leading-tight line-clamp-1">{item.name}</h3>
+          <span className="font-bold text-[#b71c1c] text-sm">${parseFloat(item.price).toFixed(2)}</span>
+        </div>
         
-        <div className="mt-auto flex items-center justify-between pt-2">
-          <span className="font-bold text-[#b71c1c] text-lg">${parseFloat(item.price).toFixed(2)}</span>
-          
+        {/* Compact Action Button(s) */}
+        <div className="mt-1">
           {quantity > 0 ? (
-            <div className="flex items-center bg-[#f0ebe1] rounded-full p-1 shadow-sm border border-[#e8dfd1]">
+            <div className="flex items-center justify-between bg-gray-50 rounded-lg p-1 border border-gray-100">
               <button 
                 onClick={() => {
                   vibrate(50);
                   updateQuantity(item.id, -1);
                 }}
-                className="w-10 h-10 flex items-center justify-center bg-white rounded-full text-[#5a3a22] shadow-sm active:scale-95 transition-transform"
+                className="w-7 h-7 flex items-center justify-center bg-white rounded-md text-[#5a3a22] shadow-sm active:scale-90 transition-all"
               >
-                <Minus size={18} strokeWidth={3} />
+                <Minus size={14} strokeWidth={3} />
               </button>
-              <span className="w-8 text-center font-bold text-[#5a3a22] text-sm">{quantity}</span>
+              <span className="text-xs font-black text-[#5a3a22]">{quantity}</span>
               <button 
                 onClick={() => {
                   vibrate(50);
                   updateQuantity(item.id, 1);
                 }}
-                className="w-10 h-10 flex items-center justify-center bg-[#5a3a22] rounded-full text-white shadow-sm active:scale-95 transition-transform"
+                className="w-7 h-7 flex items-center justify-center bg-[#5a3a22] rounded-md text-white shadow-sm active:scale-90 transition-all"
               >
-                <Plus size={18} strokeWidth={3} />
+                <Plus size={14} strokeWidth={3} />
               </button>
             </div>
           ) : (
@@ -56,9 +63,10 @@ const MenuCard = ({ item }) => {
                 addToCart(item);
                 addToast(`${item.name} added to cart`);
               }}
-              className="w-12 h-12 flex items-center justify-center bg-[#5a3a22] rounded-full text-white shadow-md active:scale-95 transition-transform hover:bg-[#4a2f1d]"
+              className="w-full bg-[#5a3a22] text-white text-[11px] font-bold py-1.5 rounded-lg active:scale-95 transition-all flex items-center justify-center gap-1 shadow-sm"
             >
-              <Plus size={24} strokeWidth={2.5} />
+              <Plus size={12} strokeWidth={3} />
+              <span>Add</span>
             </button>
           )}
         </div>

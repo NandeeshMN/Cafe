@@ -15,7 +15,7 @@ const BottomBar = () => {
   const showFloatingCart = isMenuPage && cartCount > 0;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 pointer-events-none">
+    <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] z-50 pointer-events-none">
       {/* Floating Cart Summary on Menu */}
       {showFloatingCart && (
         <div className="px-4 pb-4 pointer-events-auto">

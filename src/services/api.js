@@ -48,6 +48,11 @@ export const deleteMenuItem = async (id) => {
   return response.data;
 };
 
+export const updateMenuItem = async (id, itemData) => {
+  const response = await api.put(`/menu/${id}`, itemData);
+  return response.data;
+};
+
 // Order APIs
 export const placeOrder = async (orderData) => {
   const response = await api.post('/orders', orderData);

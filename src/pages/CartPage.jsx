@@ -217,7 +217,7 @@ const CartPage = () => {
       </main>
 
       {/* Sticky Payment CTA */}
-      <div className="fixed bottom-[65px] left-0 right-0 bg-[#faf9f6]/95 backdrop-blur-md border-t border-gray-200 p-4 z-40 shadow-[0_-10px_20px_rgba(0,0,0,0.05)] pb-safe">
+      <div className="fixed bottom-[65px] left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-[#faf9f6]/95 backdrop-blur-md border-t border-gray-200 p-4 z-40 shadow-[0_-10px_20px_rgba(0,0,0,0.05)] pb-safe">
         <button
           onClick={handleOpenPaymentPage}
           disabled={!hasNewItems}

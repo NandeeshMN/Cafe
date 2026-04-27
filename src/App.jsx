@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { CartProvider } from './context/CartContext';
 import MenuPage from './pages/MenuPage';
 import CartPage from './pages/CartPage';
@@ -18,12 +18,34 @@ import AdminTables from './pages/admin/Tables';
 import ForgotPassword from './pages/admin/ForgotPassword';
 import ProtectedRoute from './components/ProtectedRoute';
 
+// Layout Wrapper to separate Customer Mobile view from Admin Desktop view
+const AppLayout = ({ children }) => {
+  const location = useLocation();
+  const isAdminPath = location.pathname.startsWith('/admin');
+
+  if (isAdminPath) {
+    return (
+      <div className="min-h-screen bg-white">
+        {children}
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-100 flex justify-center selection:bg-[#5a3a22]/10">
+      <div className="w-full max-w-[480px] bg-[#faf9f6] relative min-h-screen shadow-2xl shadow-black/5 flex flex-col overflow-x-hidden">
+        {children}
+      </div>
+    </div>
+  );
+};
+
 function App() {
   return (
     <ToastProvider>
       <CartProvider>
         <Router>
-          <div className="w-full min-h-screen bg-[#faf9f6] relative overflow-x-hidden">
+          <AppLayout>
             <Routes>
               {/* Public Routes */}
               <Route path="/" element={<MenuPage />} />
@@ -36,7 +58,6 @@ function App() {
               {/* Admin Auth Routes (Public) */}
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin/forgot-password" element={<ForgotPassword />} />
-              {/* Legacy token-based reset route — redirect to OTP flow */}
               <Route path="/admin/reset-password" element={<Navigate to="/admin/forgot-password" replace />} />
 
               {/* Protected Admin Routes */}
@@ -52,7 +73,7 @@ function App() {
                 <Route path="tables" element={<AdminTables />} />
               </Route>
             </Routes>
-          </div>
+          </AppLayout>
         </Router>
       </CartProvider>
     </ToastProvider>
