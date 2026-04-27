@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Coffee, Mail, Lock, AlertCircle, Eye, EyeOff } from 'lucide-react';
 import { adminLogin } from '../../services/api';
 
@@ -92,9 +92,9 @@ const Login = () => {
             </div>
 
             <div className="flex items-center justify-end">
-              <button type="button" className="text-sm font-medium text-[#5a3a22] hover:underline">
+              <Link to="/admin/forgot-password" size="sm" className="text-sm font-medium text-[#5a3a22] hover:underline">
                 Forgot Password?
-              </button>
+              </Link>
             </div>
 
             <button

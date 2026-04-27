@@ -68,7 +68,7 @@ const BottomBar = () => {
         </NavLink>
         
         <NavLink 
-          to="/success" 
+          to="/orders" 
           className={({ isActive }) => `flex flex-col items-center justify-center min-h-[64px] min-w-[64px] flex-1 transition-colors ${isActive ? 'text-[#b71c1c]' : 'text-gray-400 hover:text-gray-600'}`}
         >
           <ReceiptText size={26} strokeWidth={2.5} className="mb-1" />

@@ -10,14 +10,9 @@ export const CartProvider = ({ children }) => {
     return saved ? JSON.parse(saved) : [];
   });
   
-  const [previousOrder, setPreviousOrder] = useState(() => {
-    const saved = localStorage.getItem('previousOrder');
-    return saved ? JSON.parse(saved) : null;
-  });
-
-  const [orderInfo, setOrderInfo] = useState(() => {
-    const saved = localStorage.getItem('orderInfo');
-    return saved ? JSON.parse(saved) : null;
+  const [userOrders, setUserOrders] = useState(() => {
+    const saved = localStorage.getItem('userOrders');
+    return saved ? JSON.parse(saved) : [];
   });
 
   const [tableId, setTableId] = useState(() => {
@@ -29,12 +24,8 @@ export const CartProvider = ({ children }) => {
   }, [cartItems]);
 
   useEffect(() => {
-    localStorage.setItem('previousOrder', JSON.stringify(previousOrder));
-  }, [previousOrder]);
-
-  useEffect(() => {
-    localStorage.setItem('orderInfo', JSON.stringify(orderInfo));
-  }, [orderInfo]);
+    localStorage.setItem('userOrders', JSON.stringify(userOrders));
+  }, [userOrders]);
 
   const addToCart = (item) => {
     setCartItems(prev => {
@@ -51,39 +42,38 @@ export const CartProvider = ({ children }) => {
   };
 
   const updateQuantity = (id, delta) => {
-    setCartItems(prev => prev.map(item => {
-      if (item.id === id) {
-        const newQuantity = item.quantity + delta;
-        return newQuantity > 0 ? { ...item, quantity: newQuantity } : item;
-      }
-      return item;
-    }));
+    setCartItems(prev =>
+      prev
+        .map(item => {
+          if (item.id === id) {
+            const newQuantity = item.quantity + delta;
+            return newQuantity > 0 ? { ...item, quantity: newQuantity } : null;
+          }
+          return item;
+        })
+        .filter(Boolean)
+    );
   };
 
   const placeOrderSuccess = (orderData) => {
-    // Move current cart items to previousOrder
-    if (previousOrder) {
-      setPreviousOrder({
-        ...previousOrder,
-        items: [...previousOrder.items, ...cartItems],
-        total: previousOrder.total + getCartTotal()
-      });
-    } else {
-      setPreviousOrder({
-        items: [...cartItems],
-        total: getCartTotal()
-      });
-    }
+    // Add the new order to the start of the list
+    const newOrder = {
+      ...orderData,
+      id: orderData.id || orderData.order_number || `ORD-${Math.floor(Math.random() * 10000)}`,
+      items: [...cartItems],
+      total_amount: getCartTotal(),
+      status: 'Preparing',
+      created_at: new Date().toISOString()
+    };
     
-    // Only set orderInfo if it's the first time, or update it
-    setOrderInfo(orderData);
+    console.log('Adding new order to local history:', newOrder);
+    setUserOrders(prev => [newOrder, ...prev]);
     setCartItems([]);
   };
 
-  const cancelCurrentOrder = () => {
-    setPreviousOrder(null);
-    setOrderInfo(null);
-    setCartItems([]);
+  const clearOrders = () => {
+    setUserOrders([]);
+    localStorage.removeItem('userOrders');
   };
 
   useEffect(() => {
@@ -92,14 +82,13 @@ export const CartProvider = ({ children }) => {
     }
   }, [tableId]);
 
-  const getCartTotal = () => cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const getCartTotal = () => cartItems.reduce((sum, item) => sum + parseFloat(item.price) * item.quantity, 0);
   const getCartCount = () => cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <CartContext.Provider value={{
       cartItems,
-      previousOrder,
-      orderInfo,
+      userOrders,
       tableId,
       setTableId,
       addToCart,
@@ -108,7 +97,7 @@ export const CartProvider = ({ children }) => {
       getCartTotal,
       getCartCount,
       placeOrderSuccess,
-      cancelCurrentOrder
+      clearOrders
     }}>
       {children}
     </CartContext.Provider>

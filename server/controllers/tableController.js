@@ -16,9 +16,10 @@ const getLocalIp = () => {
 
 export const getTables = async (req, res) => {
   try {
-    const [rows] = await db.query('SELECT * FROM tables ORDER BY table_number ASC');
-    res.json(rows);
+    const result = await db.query('SELECT * FROM tables ORDER BY table_number ASC');
+    res.json(result.rows);
   } catch (error) {
+    console.error('Error fetching tables:', error);
     res.status(500).json({ message: 'Error fetching tables' });
   }
 };
@@ -30,13 +31,14 @@ export const addTable = async (req, res) => {
   }
 
   try {
-    const [result] = await db.query('INSERT INTO tables (table_number) VALUES (?)', [table_number]);
-    const [newTable] = await db.query('SELECT * FROM tables WHERE id = ?', [result.insertId]);
-    res.status(201).json(newTable[0]);
+    const result = await db.query('INSERT INTO tables (table_number) VALUES ($1) RETURNING *', [table_number]);
+    res.status(201).json(result.rows[0]);
   } catch (error) {
-    if (error.code === 'ER_DUP_ENTRY') {
+    // PostgreSQL error code for unique violation
+    if (error.code === '23505') {
       return res.status(400).json({ message: 'Table number already exists' });
     }
+    console.error('Error adding table:', error);
     res.status(500).json({ message: 'Error adding table' });
   }
 };
@@ -44,8 +46,8 @@ export const addTable = async (req, res) => {
 export const getTableQRCode = async (req, res) => {
   const { id } = req.params;
   try {
-    const [rows] = await db.query('SELECT id FROM tables WHERE id = ?', [id]);
-    if (rows.length === 0) {
+    const result = await db.query('SELECT id FROM tables WHERE id = $1', [id]);
+    if (result.rows.length === 0) {
       return res.status(404).json({ message: 'Table not found' });
     }
 
@@ -62,6 +64,7 @@ export const getTableQRCode = async (req, res) => {
     res.setHeader('Content-Type', 'image/png');
     res.send(qrImage);
   } catch (error) {
+    console.error('Error generating QR code:', error);
     res.status(500).json({ message: 'Error generating QR code' });
   }
 };

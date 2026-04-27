@@ -30,17 +30,15 @@ const CartPage = () => {
   const [isInstructionsModalOpen, setIsInstructionsModalOpen] = useState(false);
   const [specialInstructions, setSpecialInstructions] = useState('');
 
-  const handleOpenPaymentModal = () => {
+  const handleOpenPaymentPage = () => {
     if (!hasNewItems) return;
-    setIsPaymentModalOpen(true);
+    localStorage.setItem('specialInstructions', specialInstructions);
+    navigate('/payment');
   };
 
   const handleConfirmPayment = async () => {
-    if (!tableId) {
-      alert("Please scan a table QR code to place an order.");
-      return;
-    }
     try {
+      setIsProcessing(true);
       const result = await placeOrder({ 
         table_id: tableId,
         items: cartItems, 
@@ -221,7 +219,7 @@ const CartPage = () => {
       {/* Sticky Payment CTA */}
       <div className="fixed bottom-[65px] left-0 right-0 bg-[#faf9f6]/95 backdrop-blur-md border-t border-gray-200 p-4 z-40 shadow-[0_-10px_20px_rgba(0,0,0,0.05)] pb-safe">
         <button
-          onClick={handleOpenPaymentModal}
+          onClick={handleOpenPaymentPage}
           disabled={!hasNewItems}
           className={`w-full h-14 rounded-2xl font-bold flex justify-center items-center gap-2 shadow-lg transition-all active:scale-95 ${
             !hasNewItems 
@@ -234,13 +232,6 @@ const CartPage = () => {
           <ArrowRight size={20} />
         </button>
       </div>
-
-      <PaymentModal 
-        isOpen={isPaymentModalOpen} 
-        onClose={() => setIsPaymentModalOpen(false)} 
-        onConfirm={handleConfirmPayment}
-        totalDue={totalDue}
-      />
 
       <InstructionsModal 
         isOpen={isInstructionsModalOpen}

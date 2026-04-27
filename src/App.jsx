@@ -3,7 +3,9 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { CartProvider } from './context/CartContext';
 import MenuPage from './pages/MenuPage';
 import CartPage from './pages/CartPage';
+import PaymentPage from './pages/PaymentPage';
 import SuccessPage from './pages/SuccessPage';
+import OrdersPage from './pages/OrdersPage';
 import { ToastProvider } from './context/ToastContext';
 
 // Admin Pages
@@ -13,6 +15,7 @@ import AdminDashboard from './pages/admin/Dashboard';
 import AdminOrders from './pages/admin/Orders';
 import AdminMenu from './pages/admin/Menu';
 import AdminTables from './pages/admin/Tables';
+import ForgotPassword from './pages/admin/ForgotPassword';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
@@ -26,10 +29,15 @@ function App() {
               <Route path="/" element={<MenuPage />} />
               <Route path="/table/:id" element={<MenuPage />} />
               <Route path="/cart" element={<CartPage />} />
+              <Route path="/payment" element={<PaymentPage />} />
               <Route path="/success" element={<SuccessPage />} />
+              <Route path="/orders" element={<OrdersPage />} />
 
-              {/* Admin Login */}
+              {/* Admin Auth Routes (Public) */}
               <Route path="/admin/login" element={<AdminLogin />} />
+              <Route path="/admin/forgot-password" element={<ForgotPassword />} />
+              {/* Legacy token-based reset route — redirect to OTP flow */}
+              <Route path="/admin/reset-password" element={<Navigate to="/admin/forgot-password" replace />} />
 
               {/* Protected Admin Routes */}
               <Route path="/admin" element={

@@ -90,8 +90,23 @@ export const downloadSmallQRSheet = async () => {
   return response.data;
 };
 
-// Admin Auth API
+// Admin Auth APIs
 export const adminLogin = async (email, password) => {
   const response = await api.post('/admin/login', { email, password });
+  return response.data;
+};
+
+export const sendOTP = async (email) => {
+  const response = await api.post('/admin/send-otp', { email });
+  return response.data;
+};
+
+export const verifyOTP = async (email, otp) => {
+  const response = await api.post('/admin/verify-otp', { email, otp });
+  return response.data;
+};
+
+export const resetPassword = async (email, otp, newPassword) => {
+  const response = await api.post('/admin/reset-password', { email, otp, newPassword });
   return response.data;
 };

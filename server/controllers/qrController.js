@@ -17,7 +17,8 @@ const getLocalIp = () => {
 
 export const generateSmallQRSheet = async (req, res) => {
   try {
-    const [tables] = await db.query('SELECT * FROM tables ORDER BY table_number ASC');
+    const result = await db.query('SELECT * FROM tables ORDER BY table_number ASC');
+    const tables = result.rows;
     
     const doc = new PDFDocument({ size: 'A4', margin: 40 });
     const localIp = getLocalIp();

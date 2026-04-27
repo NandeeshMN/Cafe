@@ -31,7 +31,7 @@ const CartItem = ({ item, isEditable = true }) => {
         <p className="text-xs text-gray-500 mb-2 truncate">{item.description}</p>
         
         <div className="flex items-center justify-between">
-          <span className="font-bold text-[#b71c1c]">${item.price.toFixed(2)}</span>
+          <span className="font-bold text-[#b71c1c]">${parseFloat(item.price).toFixed(2)}</span>
           
           {isEditable ? (
             <div className="flex items-center bg-[#f0ebe1] rounded-full p-1 border border-[#e8dfd1]">
